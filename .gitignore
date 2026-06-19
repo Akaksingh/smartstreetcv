@@ -1,0 +1,15 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+venv/
+env/
+.env
+backend/**/__pycache__/
+backend/**/*.pyc
+backend/**/*.pyo
+backend/tests/__pycache__/
+backend/routes/__pycache__/
+backend/services/__pycache__/
+backend/alembic/__pycache__/
