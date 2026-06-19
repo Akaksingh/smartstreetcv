@@ -1,0 +1,16 @@
+fastapi
+uvicorn
+sqlalchemy
+psycopg2-binary
+python-multipart
+requests
+langgraph
+langchain
+langchain-core
+reportlab
+python-dotenv
+pillow
+httpx
+alembic
+pydantic-settings
+pytest

@@ -1,0 +1,27 @@
+services:
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: nagarai
+      POSTGRES_USER: nagarai
+      POSTGRES_PASSWORD: nagarai
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  backend:
+    build: ./backend
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgresql://nagarai:nagarai@postgres:5432/nagarai
+    depends_on:
+      - postgres
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./complaints:/app/complaints
+
+volumes:
+  postgres_data:
