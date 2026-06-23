@@ -10,6 +10,7 @@ from fastapi.concurrency import run_in_threadpool
 from config import settings
 from schemas import AnalyzeUrlRequest
 from services.agent import run_civic_analysis
+from services.geo import extract_gps_coordinates
 from services.vlm_client import compress_image_bytes
 
 router = APIRouter(tags=["analysis"])
@@ -30,6 +31,12 @@ async def analyze_image_upload(
 ):
     try:
         uploaded_bytes = await image.read()
+        if latitude is None or longitude is None:
+            exif_lat, exif_lon = extract_gps_coordinates(uploaded_bytes)
+            if exif_lat is not None and exif_lon is not None:
+                latitude = exif_lat
+                longitude = exif_lon
+
         compressed_bytes = compress_image_bytes(uploaded_bytes)
         saved_path = _persist_image_bytes(compressed_bytes, prefix="upload")
         result = await run_in_threadpool(

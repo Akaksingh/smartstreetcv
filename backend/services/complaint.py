@@ -73,11 +73,67 @@ def build_complaint_content(issue: Issue) -> dict[str, str]:
         f"Severity {issue.severity}/4. Ward: {issue.ward_name or 'N/A'}."
     )
 
-    return {
+    default_result = {
         "report_english": english,
         "report_hindi": hindi,
         "whatsapp_summary": summary,
     }
+
+    if not settings.gemini_api_key or settings.gemini_api_key == "optional":
+        return default_result
+
+    prompt = (
+        "You are NagarAI, an AI civic assistant. Your job is to draft a formal, polished, and polite complaint letter addressed to the Municipal Corporation / Ward Officer regarding a civic issue.\n\n"
+        "Here are the details of the issue:\n"
+        f"- Issue Type: {issue.issue_type}\n"
+        f"- Location: {location_text}\n"
+        f"- Ward Name: {issue.ward_name or 'N/A'}\n"
+        f"- GPS Coordinates: {coordinates_text}\n"
+        f"- Severity level: {issue.severity}/4\n"
+        f"- English Description: {issue.description_en or 'No description'}\n"
+        f"- Hindi Description: {issue.description_hi or 'No description'}\n"
+        f"- Recommended Action: {issue.recommended_action or 'No action'}\n\n"
+        "Generate a JSON object matching this structure. Do NOT include any markdown formatting (like ```json), commentary, or extra text. Return ONLY the raw JSON string.\n"
+        "{\n"
+        '  "report_english": "A formal, professional, detailed complaint letter in English addressed to the Municipal Corporation.",\n'
+        '  "report_hindi": "नगर निगम के संबंधित अधिकारी को संबोधित करते हुए हिंदी में औपचारिक और विनम्र शिकायत पत्र। (Use correct Devanagari script).",\n'
+        '  "whatsapp_summary": "A short, engaging message (under 200 characters) in English and Hindi mix or English only, summarizing the issue and location, suitable for sharing on WhatsApp to rally neighborhood support."\n'
+        "}"
+    )
+
+    try:
+        url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={settings.gemini_api_key}"
+        payload = {
+            "contents": [
+                {
+                    "parts": [
+                        {
+                            "text": prompt
+                        }
+                    ]
+                }
+            ],
+            "generationConfig": {
+                "responseMimeType": "application/json"
+            }
+        }
+        res = requests.post(url, json=payload, timeout=20)
+        res.raise_for_status()
+        response_json = res.json()
+        text_content = response_json["candidates"][0]["content"]["parts"][0]["text"].strip()
+        
+        import json
+        refined = json.loads(text_content)
+        if "report_english" in refined and "report_hindi" in refined and "whatsapp_summary" in refined:
+            return {
+                "report_english": str(refined["report_english"]),
+                "report_hindi": str(refined["report_hindi"]),
+                "whatsapp_summary": str(refined["whatsapp_summary"]),
+            }
+    except Exception:
+        pass
+
+    return default_result
 
 
 def _build_styles(hindi_font: str) -> dict[str, ParagraphStyle]:

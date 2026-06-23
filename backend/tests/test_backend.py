@@ -87,3 +87,24 @@ def test_analyze_upload_path_uses_agent_and_saves_image(monkeypatch, tmp_path: P
     assert payload["severity_max"] == 4
     assert payload["complaint_generated"] is True
     assert payload["whatsapp_url"] == "https://wa.me/?text=test"
+
+
+def test_extract_gps_coordinates_success() -> None:
+    from services.geo import extract_gps_coordinates
+    img = Image.new("RGB", (100, 100), color="blue")
+    exif = img.getexif()
+    gps_ifd = exif.get_ifd(34853)
+    gps_ifd[1] = "N"
+    gps_ifd[2] = (28.0, 36.0, 50.0)
+    gps_ifd[3] = "E"
+    gps_ifd[4] = (77.0, 12.0, 10.0)
+    
+    buf = io.BytesIO()
+    img.save(buf, format="JPEG", exif=exif)
+    image_bytes = buf.getvalue()
+    
+    lat, lon = extract_gps_coordinates(image_bytes)
+    assert lat is not None
+    assert lon is not None
+    assert round(lat, 4) == 28.6139
+    assert round(lon, 4) == 77.2028
