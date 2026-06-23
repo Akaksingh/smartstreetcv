@@ -88,6 +88,7 @@ def store_node(state: AnalysisState) -> AnalysisState:
             overall_condition=result_block.get("overall_road_condition"),
             is_safe_vehicles=result_block.get("is_safe_for_vehicles"),
             is_safe_pedestrians=result_block.get("is_safe_for_pedestrians"),
+            affected_area_m2=primary_issue.get("affected_area_m2"),
             status="open",
             raw_vlm_output=result,
         )

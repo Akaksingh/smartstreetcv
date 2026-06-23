@@ -46,15 +46,15 @@ def test_health_endpoint(monkeypatch) -> None:
 
 
 def test_analyze_upload_path_uses_agent_and_saves_image(monkeypatch, tmp_path: Path) -> None:
-    settings = config.get_settings()
-    monkeypatch.setattr(settings, "COMPLAINTS_DIR", tmp_path / "complaints")
+    settings = config.settings
+    monkeypatch.setattr(settings, "complaints_dir", tmp_path / "complaints")
     monkeypatch.setattr(settings, "upload_dir", tmp_path / "uploads")
     monkeypatch.setattr(settings, "font_dir", tmp_path / "fonts")
-    monkeypatch.setattr(settings, "IMAGE_MAX_SIZE", 800)
-    monkeypatch.setattr(settings, "VLM_API_URL", "https://example.invalid")
-    monkeypatch.setattr(settings, "DATABASE_URL", "sqlite:///:memory:")
-    monkeypatch.setattr(settings, "VLM_RETRIES", 0)
-    settings.COMPLAINTS_DIR.mkdir(parents=True, exist_ok=True)
+    monkeypatch.setattr(settings, "max_image_side", 800)
+    monkeypatch.setattr(settings, "vlm_api_url", "https://example.invalid")
+    monkeypatch.setattr(settings, "database_url", "sqlite:///:memory:")
+    monkeypatch.setattr(settings, "vlm_retry_count", 0)
+    settings.complaints_dir.mkdir(parents=True, exist_ok=True)
     settings.upload_dir.mkdir(parents=True, exist_ok=True)
     settings.font_dir.mkdir(parents=True, exist_ok=True)
     monkeypatch.setattr(main_module, "init_db", lambda: None)

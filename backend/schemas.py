@@ -15,6 +15,7 @@ class DetectedIssue(BaseModel):
     description_hindi: Optional[str] = None
     recommended_action: Optional[str] = None
     estimated_repair_days: Optional[int] = Field(default=None, ge=0)
+    affected_area_m2: Optional[float] = Field(default=None, ge=0)
 
 
 class AnalyzeUrlRequest(BaseModel):
@@ -48,6 +49,7 @@ class IssueRead(BaseModel):
     overall_condition: Optional[int] = None
     is_safe_vehicles: Optional[bool] = None
     is_safe_pedestrians: Optional[bool] = None
+    affected_area_m2: Optional[float] = None
     status: str
     created_at: datetime
     raw_vlm_output: Optional[dict[str, Any]] = None

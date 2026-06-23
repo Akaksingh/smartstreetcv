@@ -27,6 +27,7 @@ class Issue(Base):
     overall_condition = Column(Integer, nullable=True)
     is_safe_vehicles = Column(Boolean, nullable=True)
     is_safe_pedestrians = Column(Boolean, nullable=True)
+    affected_area_m2 = Column(Float, nullable=True)
     status = Column(String(32), nullable=False, default="open")
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
     raw_vlm_output = Column(JSONB, nullable=False, default=dict)
