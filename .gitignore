@@ -13,3 +13,5 @@ backend/tests/__pycache__/
 backend/routes/__pycache__/
 backend/services/__pycache__/
 backend/alembic/__pycache__/
+
+cloudflared.exe
