@@ -1,10 +1,9 @@
 {
   "version": 2,
+  "name": "nagarai-frontend",
   "buildCommand": "npm run build",
   "outputDirectory": ".next",
   "framework": "nextjs",
   "installCommand": "npm install",
-  "env": {
-    "NEXT_PUBLIC_API_URL": "@nagarai_api_url"
-  }
+  "regions": ["bom1"]
 }

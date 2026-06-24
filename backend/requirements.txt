@@ -1,5 +1,5 @@
 fastapi
-uvicorn
+uvicorn[standard]
 sqlalchemy
 psycopg2-binary
 python-multipart
@@ -14,3 +14,6 @@ httpx
 alembic
 pydantic-settings
 pytest
+# Cloud AI + Storage
+google-generativeai>=0.8.0
+cloudinary>=1.36.0
