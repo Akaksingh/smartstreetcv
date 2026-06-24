@@ -46,7 +46,7 @@ class IssueRead(BaseModel):
     description_en: Optional[str] = None
     description_hi: Optional[str] = None
     recommended_action: Optional[str] = None
-    overall_condition: Optional[int] = None
+    overall_condition: Optional[str] = None
     is_safe_vehicles: Optional[bool] = None
     is_safe_pedestrians: Optional[bool] = None
     affected_area_m2: Optional[float] = None
