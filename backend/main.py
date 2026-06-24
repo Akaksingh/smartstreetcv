@@ -15,10 +15,11 @@ app = FastAPI(title="NagarAI Backend", version="1.0.0")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["*"],   # Allows Vercel, Cloudflare Tunnel, and localhost
     allow_credentials=False,
-    allow_methods=["*"],
+    allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allow_headers=["*"],
+    expose_headers=["*"],
 )
 
 app.mount("/complaints", StaticFiles(directory=str(settings.complaints_dir)), name="complaints")

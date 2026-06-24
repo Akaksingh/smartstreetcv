@@ -41,7 +41,14 @@ export default function MapPage() {
   }, []);
 
   useEffect(() => {
-    if (typeof window === 'undefined' || !mapRef.current || leafletRef.current) return;
+    if (typeof window === 'undefined' || !mapRef.current) return;
+    // Destroy existing map if already initialized (prevents hot-reload error)
+    if (leafletRef.current) {
+      const { map } = leafletRef.current as { map: import('leaflet').Map };
+      map.remove();
+      leafletRef.current = null;
+    }
+
     import('leaflet').then(L => {
       // @ts-expect-error leaflet icon fix
       delete L.Icon.Default.prototype._getIconUrl;
@@ -59,6 +66,15 @@ export default function MapPage() {
         map.setView([pos.coords.latitude, pos.coords.longitude], 14);
       });
     });
+
+    return () => {
+      if (leafletRef.current) {
+        const { map } = leafletRef.current as { map: import('leaflet').Map };
+        map.remove();
+        leafletRef.current = null;
+      }
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
