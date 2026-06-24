@@ -24,7 +24,7 @@ class Issue(Base):
     description_en = Column(Text, nullable=True)
     description_hi = Column(Text, nullable=True)
     recommended_action = Column(Text, nullable=True)
-    overall_condition = Column(Integer, nullable=True)
+    overall_condition = Column(Text, nullable=True)
     is_safe_vehicles = Column(Boolean, nullable=True)
     is_safe_pedestrians = Column(Boolean, nullable=True)
     affected_area_m2 = Column(Float, nullable=True)
