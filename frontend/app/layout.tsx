@@ -1,21 +1,26 @@
 import type { Metadata } from 'next';
 import './globals.css';
-import BottomNav from '@/components/BottomNav';
+import GovHeader from '@/components/GovHeader';
 
 export const metadata: Metadata = {
-  title: 'NagarAI — Smart Street Civic Reporter',
-  description: 'Report road issues, potholes, and civic problems in your neighbourhood using AI. Built for Indian cities.',
-  viewport: 'width=device-width, initial-scale=1, maximum-scale=1',
+  title: 'NagarAI — Civic Issue Reporting Portal',
+  description: 'AI-powered road and civic infrastructure reporting portal for Indian citizens. Report potholes, waterlogging, open manholes and other road issues instantly.',
+  keywords: 'civic issues, road repair, pothole reporting, india, smart city, NagarAI',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <body>
-        <div className="page-wrapper">
-          {children}
-        </div>
-        <BottomNav />
+        <GovHeader />
+        {children}
+        <footer className="gov-footer">
+          <p>
+            <strong>NagarAI — Civic Issue Reporting Portal</strong><br />
+            Powered by AI for Indian citizens &nbsp;|&nbsp; Built with Qwen2.5-VL + FastAPI + PostgreSQL<br />
+            Report issues to your local municipal corporation. Data is for civic use only.
+          </p>
+        </footer>
       </body>
     </html>
   );
