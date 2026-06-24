@@ -51,8 +51,18 @@ export async function getIssue(id: string): Promise<IssueRead> {
 
 export function getImageUrl(path: string): string {
   if (!path) return '';
+  // Already a full HTTP URL
   if (path.startsWith('http')) return path;
-  return `${API_BASE}/${path.replace(/^\//, '')}`;
+  // New-style relative path: /complaints/uploads/...
+  if (path.startsWith('/')) return `${API_BASE}${path}`;
+  // Old-style absolute Windows path: D:\smartstreetcv\complaints\uploads\file.jpg
+  // Extract the "complaints/..." portion
+  const complaintsIdx = path.toLowerCase().indexOf('complaints');
+  if (complaintsIdx !== -1) {
+    const relative = path.slice(complaintsIdx).replace(/\\/g, '/');
+    return `${API_BASE}/${relative}`;
+  }
+  return `${API_BASE}/${path}`;
 }
 
 export function reverseGeocode(lat: number, lng: number): Promise<string> {

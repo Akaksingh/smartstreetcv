@@ -17,9 +17,13 @@ router = APIRouter(tags=["analysis"])
 
 
 def _persist_image_bytes(image_bytes: bytes, prefix: str = "upload") -> str:
-    target_path = settings.upload_dir / f"{prefix}-{uuid4().hex}.jpg"
+    """Save image bytes to disk and return the web-accessible relative URL path."""
+    filename = f"{prefix}-{uuid4().hex}.jpg"
+    target_path = settings.upload_dir / filename
     target_path.write_bytes(image_bytes)
-    return str(target_path)
+    # Return relative URL that the /complaints static mount serves
+    relative = target_path.relative_to(settings.complaints_dir)
+    return f"/complaints/{relative.as_posix()}"
 
 
 @router.post("/analyze")

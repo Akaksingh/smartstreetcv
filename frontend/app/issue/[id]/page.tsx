@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { IssueRead } from '@/lib/types';
-import { getIssue } from '@/lib/api';
+import { getIssue, getImageUrl } from '@/lib/api';
 import SeverityBadge from '@/components/SeverityBadge';
 import Link from 'next/link';
 
@@ -87,7 +87,7 @@ export default function IssueDetailPage() {
               <div>
                 <div className="section-header">Submitted Photograph</div>
                 <div className="panel" style={{ borderTop: 'none', borderTopLeftRadius: 0, borderTopRightRadius: 0 }}>
-                  <img src={issue.image_url} alt={typeLabel} className="detail-image" />
+                  <img src={getImageUrl(issue.image_url)} alt={typeLabel} className="detail-image" />
                 </div>
               </div>
             )}
